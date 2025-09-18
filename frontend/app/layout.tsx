@@ -110,7 +110,6 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
             <Header />
 
             <main>
-              <SidebarTrigger />
               {children}
             </main>
 

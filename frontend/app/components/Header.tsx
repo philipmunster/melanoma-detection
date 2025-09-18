@@ -7,7 +7,11 @@ export default function Header() {
             <div className='bg-red-600 mx-4 h-14 aspect-square flex justify-center items-center rounded-lg'>
                 <SearchCode className='w-8 h-8 text-white'/>
             </div>
-            <h1 className='font-bold text-xl leading-tight'>Melanoma Detection</h1>
+            <div>
+              <h1 className='font-bold text-xl leading-tight'>Melanoma Detection</h1>
+              <p className='text-neutral-500 text-xs'>Disclamer: For education purposes only</p>
+            </div>
+            <SidebarTrigger className='ml-auto mr-5'/>
 
         </header>
     )
