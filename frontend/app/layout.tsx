@@ -107,7 +107,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
           </Sidebar>
           <SidebarInset>
             
-            <div className="flex flex-col items-between h-screen">
+            <div className="flex flex-col items-between">
               <Header />
 
               <main className="grow p-6">

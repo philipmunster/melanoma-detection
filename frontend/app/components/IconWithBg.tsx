@@ -40,7 +40,6 @@ export default function IconWithBg({
         'flex items-center justify-center rounded-lg',
         SIZE_STYLES[size].wrapper,
         COLOR_STYLES[color],
-        // put consumer-provided className last so it can override defaults
         className,
       )}
     >
