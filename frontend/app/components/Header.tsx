@@ -1,4 +1,5 @@
 import { SearchCode, Menu } from 'lucide-react'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 
 export default function Header() {
     return (
@@ -6,10 +7,7 @@ export default function Header() {
             <div className='bg-red-600 mx-4 h-14 aspect-square flex justify-center items-center rounded-lg'>
                 <SearchCode className='w-8 h-8 text-white'/>
             </div>
-            <h1 className='font-bold text-xl leading-tight'>Melanoma <br /> Detection</h1>
-            <button className='ml-auto mr-8'>
-                <Menu />
-            </button>
+            <h1 className='font-bold text-xl leading-tight'>Melanoma Detection</h1>
 
         </header>
     )
