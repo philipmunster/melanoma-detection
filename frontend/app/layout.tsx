@@ -110,7 +110,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
             <div className="flex flex-col items-between h-screen">
               <Header />
 
-              <main className="grow">
+              <main className="grow p-6">
                 {children}
               </main>
 
