@@ -1,3 +1,91 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { Upload, ImagePlus, AlertCircleIcon } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useState, useRef } from 'react'
+import { uploadImage } from "./actions" 
+
 export default function TryPage() {
-  return <h1>hi</h1>
+  const [result, setResult] = useState<number | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+
+  async function handleUpload(formData: FormData) {
+    setError(null)
+    setResult(null)
+    try {
+      console.log('upload')
+      const result = await uploadImage(formData)
+      if (result) {
+        setResult(result) 
+      } else {
+        throw new Error('An unknown error occurred')
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred')
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-8 my-5">
+    <Alert variant="destructive" className="border-red-300 bg-red-50">
+      <AlertCircleIcon />
+      <AlertTitle>Do not take these results seriously!</AlertTitle>
+      <AlertDescription>
+        This algorithm can make mistakes. Always consult a doctor.
+      </AlertDescription>
+    </Alert>
+      <div>
+        <h1 className="text-3xl font-black mb-2">
+            Try now
+        </h1>
+        <p>Upload an image of a mole and receive our algorithm's estimated probability of melanoma. Our AI will analyze the image using the same ABC features that dermatologists use in clinical practice.</p>
+      </div>
+
+    {/* upload outer wrapper */}
+    <div className="border border-sidebar-border p-5 rounded-md">
+      <p className="font-semibold">Upload Lesion Image</p>
+      <p>Drag and drop an image file or click to browse.</p>
+      
+      {/* upload drag and drop area */}
+      <div className="border border-neutral-300 border-dashed px-5 py-12 mt-5 rounded-md flex flex-col gap-5 items-center hover:bg-neutral-100">
+        <Upload className="size-10"/>
+        <div>
+          <p className="text-lg text-center">Drag and drop an image here</p>
+          <p className="text-gray-600 text-sm mt-2 text-center">Supported formats: JPG and PNG</p>
+        </div>
+
+        <form ref={formRef} action={handleUpload}>
+          <input 
+            type="file" 
+            id='file' 
+            name="file" 
+            accept=".png, .jpg, .jpeg" 
+            className="hidden"
+            onChange={() => formRef.current?.requestSubmit()}
+          />
+          <Button type="button">
+            <label className="flex items-center gap-2" htmlFor='file'>
+              Upload file<ImagePlus />
+            </label>
+          </Button>
+        </form>
+
+      </div>
+
+      {result && (
+        <div className="flex flex-col my-8">
+          <h3 className="font-semibold text-center">Your result is in</h3>
+          <p className="text-center">Probability of melanoma is estimated to be:</p>
+          <p className="mt-4 text-5xl font-bold text-center">{result * 100}%</p>
+        </div>
+      )}
+
+      {error && <p>{error}</p>}
+
+    </div>
+    
+    </div>
+  )
 }
