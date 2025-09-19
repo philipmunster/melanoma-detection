@@ -33,12 +33,12 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
   const itemsGroup1 = [
     {
       title: "Home",
-      url: "#",
+      url: "/",
       icon: Home,
     },
     {
       title: "Try Now",
-      url: "#",
+      url: "/try",
       icon: UserSearch,
     },
     {
@@ -107,7 +107,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
           </Sidebar>
           <SidebarInset>
             
-            <div className="flex flex-col items-between">
+            <div className="flex flex-col items-between h-screen">
               <Header />
 
               <main className="grow p-6">
