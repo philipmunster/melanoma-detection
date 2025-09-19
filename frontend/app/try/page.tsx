@@ -16,9 +16,9 @@ export default function TryPage() {
     setResult(null)
     try {
       console.log('upload')
-      const result = await uploadImage(formData)
-      if (result) {
-        setResult(result) 
+      const data = await uploadImage(formData)
+      if (data.result) {
+        setResult(data.result) 
       } else {
         throw new Error('An unknown error occurred')
       }
