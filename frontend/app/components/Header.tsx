@@ -8,7 +8,7 @@ export default function Header() {
             <IconWithBg className='mx-4' Icon={SearchCode} color='red'/>
             <div>
               <h1 className='font-bold text-xl leading-tight'>Melanoma Detection</h1>
-              <p className='text-neutral-500 text-xs'>Disclamer: For education purposes only</p>
+              <p className='text-neutral-500 text-xs'>Disclamer: For educational purposes only</p>
             </div>
             <SidebarTrigger className='ml-auto mr-5'/>
 
