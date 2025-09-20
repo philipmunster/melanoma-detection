@@ -20,17 +20,23 @@ export async function uploadImage(formData: FormData) {
   
   const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000'
 
-  const res = await fetch(`${backendUrl}/process`, {
+  const res = await fetch(`${backendUrl}/process?api_key=${process.env.API_KEY}`, {
     method: 'POST',
     body: formData
   })
 
   if (!res.ok) {
-    throw new Error('Issue with processing the image. Please try another image.')
+    let errorMessage = 'Issue with processing the image. Please try another image.'
+    try {
+      const errorData = await res.json()
+      errorMessage = errorData.detail || errorMessage
+    } catch {
+      // If parsing fails, use default message
+    }
+    throw new Error(errorMessage)
   }
 
   const data = await res.json()
 
-  // console.log(data)
   return data
 } 

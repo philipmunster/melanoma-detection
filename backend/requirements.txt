@@ -1,23 +1,23 @@
 # Core FastAPI dependencies
-fastapi==0.104.1
-uvicorn==0.24.0
-python-multipart==0.0.6
-slowapi==0.1.9
+fastapi[standard]
+uvicorn
+python-multipart
+slowapi
 
 # Data science libraries
-numpy==2.2.6
-pandas==2.2.3
-scikit-learn==1.6.1
-scikit-image==0.25.2
-opencv-python==4.11.0.86
-pillow==11.2.1
+numpy
+pandas
+scikit-learn
+scikit-image
+opencv-python
+pillow
 ipykernel 
 ipython 
-matplotlib==3.10.1
+matplotlib
 matplotlib-inline 
-scipy==1.15.2
-seaborn==0.13.2
-statsmodels==0.14.4
+scipy
+seaborn
+statsmodels
 
 # Optional: for development
-python-dotenv==1.1.0
+python-dotenv
