@@ -12,6 +12,8 @@ from io import BytesIO
 import os
 from dotenv import load_dotenv
 from backend.utils import get_ABC
+import matplotlib.pyplot as plt
+from backend.services.inference import predict_proba_from_features
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(title='Melanoma Detection API')
@@ -35,6 +37,10 @@ async def verify_api_key(api_key: str = None):
     raise HTTPException(status_code=401, detail="Invalid API key")
   return True
 
+import numpy as np
+import matplotlib.pyplot as plt
+import cv2
+
 @app.post("/process")
 @limiter.limit("3/minute")
 @limiter.limit("20/hour")
@@ -42,8 +48,13 @@ async def process_image(request: Request, file: UploadFile = File(...), api_key_
   try:
     async with asyncio.timeout(30): # 30 sec to process image
 
-      # check size
       content = await file.read()
+
+      nparr = np.frombuffer(content, np.uint8)
+      img_bgr = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+      plt.imshow(img_bgr)
+
+      # check size
       if len(content) > 5 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="File is too large. Max size is 5 MB.")
 
@@ -59,8 +70,11 @@ async def process_image(request: Request, file: UploadFile = File(...), api_key_
       
       print(f"Processing file: {file.filename}, size: {len(content)} bytes")
 
-      img_hairless, img_mask, A, B, C = get_ABC()
+      img_hairless, img_mask, A, B, C = get_ABC(content)
 
-      return JSONResponse(content={"result": 0.02, "detail": 'hey'})
+      proba = predict_proba_from_features([A, B, C])
+
+      # return JSONResponse(content={"result": proba, "img_hairless": img_hairless, "img_mask": img_mask})
+      return JSONResponse(content={"result": float(proba)})
   except asyncio.TimeoutError:
      raise HTTPException(status_code=408, detail='Processing took too long. Please try again.')

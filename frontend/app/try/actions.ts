@@ -38,5 +38,7 @@ export async function uploadImage(formData: FormData) {
 
   const data = await res.json()
 
+  console.log(data)
+
   return data
 } 

@@ -1,30 +1,39 @@
 import numpy as np
 from skimage.transform import rotate
+import cv2
 
 def get_feature_A(mask):
     """
     Main function to get the asymmetry score used as the A feature in the ABC model
     """
-    scores = []
-    # Crop and rotate 6 times to cover 180 degrees to check asymmetry from multiple angles
-    for _ in range(6):
-        # crop the mask
-        segment = crop(mask)
-        # Add the asymmetry score for each rotation (the # pixels not overlapping divided by total white pixels)
-        flipped = np.flip(segment)
-        # fallback if the crop didn't include any of the segment
-        if np.sum(segment) == 0:
-            continue
-        # compute the XOR to find the not overlapping
-        score = np.sum(np.logical_xor(segment, flipped)) / (np.sum(segment))
-        # append the score for this one segment
-        scores.append(score)
-        # Rotate 30 degrees before next iteration 
-        mask = rotate(mask, 30)
-        
-    # Return the average mean score
-    return sum(scores) / len(scores) if len(scores) > 0 else None 
-    # range goes from 0 to 1 (theoretically) where 0 is perfect circle. In our case score can go above 1 if multiple leasions are in the mask.
+    try:
+      scores = []
+      # Crop and rotate 6 times to cover 180 degrees to check asymmetry from multiple angles
+      for _ in range(6):
+          if np.sum(mask) == 0:
+               continue
+          # crop the mask
+          segment = crop(mask)
+          # Add the asymmetry score for each rotation (the # pixels not overlapping divided by total white pixels)
+          flipped = np.flip(segment)
+          # fallback if the crop didn't include any of the segment
+          if np.sum(segment) == 0:
+              print('0 segment')
+              continue
+          # compute the XOR to find the not overlapping
+          score = np.sum(np.logical_xor(segment, flipped)) / (np.sum(segment))
+          # append the score for this one segment
+          scores.append(score)
+          # Rotate 30 degrees before next iteration 
+          mask = rotate(mask, 30)
+      
+      # Return the average mean score
+      # print(scores)
+      return sum(scores) / len(scores) if len(scores) > 0 else None 
+      # range goes from 0 to 1 (theoretically) where 0 is perfect circle. In our case score can go above 1 if multiple leasions are in the mask.
+    except Exception as e:
+        print(e)
+        raise RuntimeError("Error computing feature A") from e
 
 
 def crop(mask): 

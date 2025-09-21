@@ -9,15 +9,18 @@ def get_feature_C(image_rgb, mask):
     Main function that gets the color irregularity used as the C feature in the ABC model.
     Returned value is variance of the means of each superpixel on both the hue and saturation color channels.
     """
-    # Get the segmented picture
-    slic_segments = slic_segmentation(image_rgb, mask)
-    # Get the variance of the hue and the saturation across each SLIC segment.
-    # Value was not included, as its strongly related to the light in which the photo was taken
-    hue_var, sat_var = hsv_variance(image_rgb, slic_segments)
-    # Combined mean of the hue and saturation variance where we weight the importance of each of them equally
-    irregularity_score = 0.5 * hue_var + 0.5 * sat_var
+    try:
+      # Get the segmented picture
+      slic_segments = slic_segmentation(image_rgb, mask)
+      # Get the variance of the hue and the saturation across each SLIC segment.
+      # Value was not included, as its strongly related to the light in which the photo was taken
+      hue_var, sat_var = hsv_variance(image_rgb, slic_segments)
+      # Combined mean of the hue and saturation variance where we weight the importance of each of them equally
+      irregularity_score = 0.5 * hue_var + 0.5 * sat_var
 
-    return irregularity_score
+      return irregularity_score
+    except Exception as e:
+      raise RuntimeError("Error computing feature C") from e
 
 def slic_segmentation(image, mask, n_segments = 200, compactness = 10): 
     """
