@@ -11,6 +11,7 @@ from PIL import Image
 from io import BytesIO
 import os
 from dotenv import load_dotenv
+from backend.utils import get_ABC
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(title='Melanoma Detection API')
@@ -57,6 +58,8 @@ async def process_image(request: Request, file: UploadFile = File(...), api_key_
         raise HTTPException(status_code=400, detail="Uploaded file is not a valid image.")
       
       print(f"Processing file: {file.filename}, size: {len(content)} bytes")
+
+      img_hairless, img_mask, A, B, C = get_ABC()
 
       return JSONResponse(content={"result": 0.02, "detail": 'hey'})
   except asyncio.TimeoutError:
