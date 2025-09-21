@@ -14,6 +14,9 @@ from dotenv import load_dotenv
 from backend.utils import get_ABC
 import matplotlib.pyplot as plt
 from backend.services.inference import predict_proba_from_features
+import base64
+import numpy as np
+import cv2
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(title='Melanoma Detection API')
@@ -36,10 +39,6 @@ async def verify_api_key(api_key: str = None):
   if not api_key or api_key != API_KEY:
     raise HTTPException(status_code=401, detail="Invalid API key")
   return True
-
-import numpy as np
-import matplotlib.pyplot as plt
-import cv2
 
 @app.post("/process")
 @limiter.limit("3/minute")
@@ -74,7 +73,24 @@ async def process_image(request: Request, file: UploadFile = File(...), api_key_
 
       proba = predict_proba_from_features([A, B, C])
 
-      # return JSONResponse(content={"result": proba, "img_hairless": img_hairless, "img_mask": img_mask})
-      return JSONResponse(content={"result": float(proba)})
+      # Encode img_hairless (RGB) as base64
+      hairless_pil = Image.fromarray(img_hairless)
+      hairless_buffer = BytesIO()
+      hairless_pil.save(hairless_buffer, format="PNG")
+      hairless_base64 = base64.b64encode(hairless_buffer.getvalue()).decode('utf-8')
+
+      # Encode img_mask (binary, scale to 0-255 for visibility)
+      mask_scaled = (img_mask * 255).astype(np.uint8)
+      mask_pil = Image.fromarray(mask_scaled, mode='L')  # Grayscale
+      mask_buffer = BytesIO()
+      mask_pil.save(mask_buffer, format="PNG")
+      mask_base64 = base64.b64encode(mask_buffer.getvalue()).decode('utf-8')
+
+      # Return with images
+      return JSONResponse(content={
+          "result": float(proba),
+          "hairless_image": f"data:image/png;base64,{hairless_base64}",
+          "mask_image": f"data:image/png;base64,{mask_base64}"
+      })
   except asyncio.TimeoutError:
      raise HTTPException(status_code=408, detail='Processing took too long. Please try again.')

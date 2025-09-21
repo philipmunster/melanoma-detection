@@ -17,8 +17,8 @@ export default function TryPage() {
     try {
       console.log('upload')
       const data = await uploadImage(formData)
-      if (data.result) {
-        setResult(data.result) 
+      if (data) {
+        setResult(data)
       } else {
         throw new Error('An unknown error occurred')
       }
@@ -65,11 +65,9 @@ export default function TryPage() {
             className="hidden"
             onChange={() => formRef.current?.requestSubmit()}
           />
-          <Button type="button">
-            <label className="flex items-center gap-2" htmlFor='file'>
-              Upload file<ImagePlus />
-            </label>
-          </Button>
+          <label className="flex items-center gap-2 border bg-black px-6 py-2 text-white rounded-md text-sm hover:bg-gray-800" htmlFor='file'>
+              Upload file<ImagePlus className="size-5"/>
+          </label>
         </form>
 
       </div>
@@ -78,7 +76,9 @@ export default function TryPage() {
         <div className="flex flex-col my-8">
           <h3 className="font-semibold text-center">Your result is in</h3>
           <p className="text-center">Probability of melanoma is estimated to be:</p>
-          <p className="mt-4 text-5xl font-bold text-center">{result * 100}%</p>
+          <p className="mt-4 text-5xl font-bold text-center">{Math.round(result.result * 10000) / 100}%</p>
+          <img src={result.mask_image}/>
+          <img src={result.hairless_image}/>
         </div>
       )}
 

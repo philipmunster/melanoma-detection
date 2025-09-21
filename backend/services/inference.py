@@ -2,7 +2,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
-artifact = joblib.load('backend/models/model_v2.joblib')
+artifact = joblib.load('backend/models/model_v3.joblib')
 PIPELINE = artifact["pipeline"]
 FEATURES = artifact["feature_names"]
 THRESHOLD = artifact.get("threshold", 0.5)
