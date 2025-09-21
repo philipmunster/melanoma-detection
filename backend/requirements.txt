@@ -1,0 +1,23 @@
+# Core FastAPI dependencies
+fastapi[standard]
+uvicorn
+python-multipart
+slowapi
+
+# Data science libraries
+numpy
+pandas
+scikit-learn
+scikit-image
+opencv-python
+pillow
+ipykernel 
+ipython 
+matplotlib
+matplotlib-inline 
+scipy
+seaborn
+statsmodels
+
+# Optional: for development
+python-dotenv

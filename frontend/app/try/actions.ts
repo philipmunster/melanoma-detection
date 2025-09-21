@@ -1,6 +1,7 @@
+'use server'
+
 export async function uploadImage(formData: FormData) {
   const file = formData.get('file') as File
-  console.log(file)
 
   // error handling
   if (!file) {
@@ -13,19 +14,29 @@ export async function uploadImage(formData: FormData) {
     throw new Error('Invalid file type. Please upload a .png, .jpg or .jpeg file.')
   }
 
-  const backendFormData = new FormData()
-  backendFormData.append('file', file)
+  // const backendFormData = new FormData()
+  // backendFormData.append('file', file)
+  // console.log(backendFormData)
   
+  const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000'
 
-  const res = await fetch('http://placeholder-backend-url/process', {
+  const res = await fetch(`${backendUrl}/process?api_key=${process.env.API_KEY}`, {
     method: 'POST',
-    body: backendFormData
+    body: formData
   })
+
   if (!res.ok) {
-    throw new Error('Issue with processing the image. Please try another image.')
+    let errorMessage = 'Issue with processing the image. Please try another image.'
+    try {
+      const errorData = await res.json()
+      errorMessage = errorData.detail || errorMessage
+    } catch {
+      // If parsing fails, use default message
+    }
+    throw new Error(errorMessage)
   }
+
   const data = await res.json()
 
-  console.log(data)
   return data
-}
+} 
