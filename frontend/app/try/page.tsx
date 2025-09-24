@@ -34,7 +34,6 @@ export default function TryPage() {
     const file = formData.get('file') as File
     const fileURL = URL.createObjectURL(file)
     setUploadedImageUrl(fileURL)
-
     try {
       const data: Data = await uploadImage(formData)
       if (data) {
@@ -44,6 +43,24 @@ export default function TryPage() {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred')
+    }
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault()
+  }
+
+  function handleDragLeave(e: React.DragEvent) {
+    e.preventDefault()
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault()
+    const file = e.dataTransfer?.files[0]
+    if (file) {
+      const formData = new FormData()
+      formData.append('file', file)
+      handleUpload(formData)
     }
   }
 
@@ -69,7 +86,12 @@ export default function TryPage() {
       <p>Drag and drop an image file or click to browse.</p>
       
       {/* upload drag and drop area */}
-      <div className="border border-neutral-300 border-dashed px-5 py-12 mt-5 rounded-md flex flex-col gap-5 items-center hover:bg-neutral-100">
+      <div 
+        className="border border-neutral-300 border-dashed px-5 py-12 mt-5 rounded-md flex flex-col gap-5 items-center hover:bg-neutral-100"
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
         <Upload className="size-10"/>
         <div>
           <p className="text-lg text-center">Drag and drop an image here</p>
@@ -92,42 +114,43 @@ export default function TryPage() {
 
       </div>
 
-      {/* hair removed */}
-      {uploadedImageUrl && (
-        <div className="flex flex-col items-center gap-2 font-semibold mt-10">
-          <p>Your uploaded image:</p>
-          <img src={uploadedImageUrl} className="rounded-sm"/>
+      <div className="flex flex-col items-center mt-10 gap-10 flex-wrap sm:flex-row sm:justify-center sm:gap-5">
+        {/* hair removed */}
+        {uploadedImageUrl && (
+          <div className="flex flex-col items-center gap-2 font-semibold sm:max-w-70">
+            <p>Your uploaded image:</p>
+            <img src={uploadedImageUrl} className="rounded-sm"/>
+          </div>
+        )}
+        {data && (
+          <>          
+            {/* hair removed */}
+            <div className="flex flex-col items-center gap-2 font-semibold sm:max-w-70">
+              <p>Result from removing hair:</p>
+              <img src={data.hairless_image} className="rounded-sm"/>
+            </div>
+            
+            {/* mask */}
+            <div className="flex flex-col items-center gap-2 font-semibold sm:max-w-70">
+              <p>Mask of the lesion detected:</p>
+              <img src={data.mask_image} className="rounded-sm"/>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* result */}
+      {data && (
+        <div className="mt-10 mb-6">
+          <h3 className="font-semibold text-center">Your result is in</h3>
+          <p className="text-center">Probability of melanoma is estimated to be:</p>
+          <p className="mt-4 text-5xl font-bold text-center">{Math.round(data.result * 10000) / 100}%</p>
         </div>
       )}
       
 
-      {data && (
-        <div className="flex flex-col mt-10 gap-10">
-          
 
-          {/* hair removed */}
-          <div className="flex flex-col items-center gap-2 font-semibold">
-            <p>Result from removing hair:</p>
-            <img src={data.hairless_image} className="rounded-sm"/>
-          </div>
-          
-          {/* mask */}
-          <div className="flex flex-col items-center gap-2 font-semibold">
-            <p>Mask of the lesion detected:</p>
-            <img src={data.mask_image} className="rounded-sm"/>
-          </div>
-
-          {/* result */}
-          <div>
-            <h3 className="font-semibold text-center">Your result is in</h3>
-            <p className="text-center">Probability of melanoma is estimated to be:</p>
-            <p className="mt-4 text-5xl font-bold text-center">{Math.round(data.result * 10000) / 100}%</p>
-          </div>
-
-        </div>
-      )}
-
-      {error && <p>{error}</p>}
+      {error && <p className="text-center mt-6 text-red-600 text-xl font-bold">{error}</p>}
 
     </div>
     
