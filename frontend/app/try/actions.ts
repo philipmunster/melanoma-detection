@@ -31,7 +31,7 @@ export async function uploadImage(formData: FormData) {
       const errorData = await res.json()
       errorMessage = errorData.detail || errorMessage
     } catch {
-      // If parsing fails, use default message
+      // don't catch anything cause we throw the default error message then
     }
     throw new Error(errorMessage)
   }

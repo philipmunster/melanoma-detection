@@ -1,24 +1,28 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
 import { Upload, ImagePlus, AlertCircleIcon } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useState, useRef } from 'react'
 import { uploadImage } from "./actions" 
 
+type Data = {
+  result: number
+  hairless_image: string
+  mask_image: string
+}
+
 export default function TryPage() {
-  const [result, setResult] = useState<number | null>(null)
+  const [data, setData] = useState<Data | null>(null)
   const [error, setError] = useState<string | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
   async function handleUpload(formData: FormData) {
     setError(null)
-    setResult(null)
+    setData(null)
     try {
-      console.log('upload')
-      const data = await uploadImage(formData)
+      const data: Data = await uploadImage(formData)
       if (data) {
-        setResult(data)
+        setData(data)
       } else {
         throw new Error('An unknown error occurred')
       }
@@ -72,13 +76,13 @@ export default function TryPage() {
 
       </div>
 
-      {result && (
+      {data && (
         <div className="flex flex-col my-8">
           <h3 className="font-semibold text-center">Your result is in</h3>
           <p className="text-center">Probability of melanoma is estimated to be:</p>
-          <p className="mt-4 text-5xl font-bold text-center">{Math.round(result.result * 10000) / 100}%</p>
-          <img src={result.mask_image}/>
-          <img src={result.hairless_image}/>
+          <p className="mt-4 text-5xl font-bold text-center">{Math.round(data.result * 10000) / 100}%</p>
+          <img src={data.mask_image}/>
+          <img src={data.hairless_image}/>
         </div>
       )}
 
