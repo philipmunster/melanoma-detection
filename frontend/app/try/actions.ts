@@ -29,7 +29,8 @@ export async function uploadImage(formData: FormData) {
     let errorMessage = 'Issue with processing the image. Please try another image.'
     try {
       const errorData = await res.json()
-      errorMessage = errorData.detail || errorMessage
+      console.log(errorData)
+      errorMessage = errorData?.error || errorMessage
     } catch {
       // don't catch anything cause we throw the default error message then
     }

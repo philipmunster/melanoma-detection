@@ -4,6 +4,7 @@ import { Upload, ImagePlus, AlertCircleIcon } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useState, useRef, useEffect } from 'react'
 import { uploadImage } from "./actions" 
+import { Button } from "@/components/ui/button"
 
 type Data = {
   result: number
@@ -68,6 +69,12 @@ export default function TryPage() {
     }
   }
 
+  function handleTryAgain() {
+    setUploadedImageUrl(null)
+    setData(null)
+    setError(null)
+  }
+
   return (
     <div className="flex flex-col gap-8 my-5">
       <Alert variant="destructive" className="border-red-300 bg-red-50">
@@ -81,7 +88,7 @@ export default function TryPage() {
           <h1 className="text-3xl font-black mb-2">
               Try now
           </h1>
-          <p>Upload an image of a mole and receive our algorithm's estimated probability of melanoma. Our AI will analyze the image using the same ABC features that dermatologists use in clinical practice.</p>
+          <p>Upload an image of a lesion and receive our algorithm's estimated probability of melanoma. Our AI will analyze the image using the same ABC features that dermatologists use in clinical practice.</p>
         </div>
 
       {/* upload outer wrapper */}
@@ -126,7 +133,6 @@ export default function TryPage() {
           
       </div>)}
 
-
       {data ? (
         <div className="border border-sidebar-border p-5 rounded-md flex flex-col items-center gap-12 py-12">
 
@@ -160,19 +166,7 @@ export default function TryPage() {
           </div>
 
           {/* try another image */}
-          <form ref={formRef} action={handleUpload}>
-            <input 
-              type="file" 
-              id='file' 
-              name="file" 
-              accept=".png, .jpg, .jpeg" 
-              className="hidden"
-              onChange={() => formRef.current?.requestSubmit()}
-            />
-            <label className="flex items-center gap-2 border bg-black px-6 py-2 text-white rounded-md text-sm hover:bg-gray-800" htmlFor='file'>
-                Try again with another image<ImagePlus className="size-5"/>
-            </label>
-          </form>
+          <Button variant={'outline'} onClick={handleTryAgain}>Try again with another image <ImagePlus className="size-5"/></Button>
 
         </div>
       ) : error ? error && <p className="text-center mt-6 text-red-600 text-xl font-bold">{error}</p> : null}
