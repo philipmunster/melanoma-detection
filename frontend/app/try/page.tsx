@@ -2,7 +2,7 @@
 
 import { Upload, ImagePlus, AlertCircleIcon } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { uploadImage } from "./actions" 
 
 type Data = {
@@ -12,13 +12,29 @@ type Data = {
 }
 
 export default function TryPage() {
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
   const [data, setData] = useState<Data | null>(null)
   const [error, setError] = useState<string | null>(null)
+
   const formRef = useRef<HTMLFormElement>(null)
+
+  useEffect(() => {
+    // nothing
+    return () => {
+      // clean up before new image uploaded
+      if (uploadedImageUrl) {
+        URL.revokeObjectURL(uploadedImageUrl)
+      }
+    }
+  }, [uploadedImageUrl])
 
   async function handleUpload(formData: FormData) {
     setError(null)
     setData(null)
+    const file = formData.get('file') as File
+    const fileURL = URL.createObjectURL(file)
+    setUploadedImageUrl(fileURL)
+
     try {
       const data: Data = await uploadImage(formData)
       if (data) {
@@ -76,13 +92,38 @@ export default function TryPage() {
 
       </div>
 
+      {/* hair removed */}
+      {uploadedImageUrl && (
+        <div className="flex flex-col items-center gap-2 font-semibold mt-10">
+          <p>Your uploaded image:</p>
+          <img src={uploadedImageUrl} className="rounded-sm"/>
+        </div>
+      )}
+      
+
       {data && (
-        <div className="flex flex-col my-8">
-          <h3 className="font-semibold text-center">Your result is in</h3>
-          <p className="text-center">Probability of melanoma is estimated to be:</p>
-          <p className="mt-4 text-5xl font-bold text-center">{Math.round(data.result * 10000) / 100}%</p>
-          <img src={data.mask_image}/>
-          <img src={data.hairless_image}/>
+        <div className="flex flex-col mt-10 gap-10">
+          
+
+          {/* hair removed */}
+          <div className="flex flex-col items-center gap-2 font-semibold">
+            <p>Result from removing hair:</p>
+            <img src={data.hairless_image} className="rounded-sm"/>
+          </div>
+          
+          {/* mask */}
+          <div className="flex flex-col items-center gap-2 font-semibold">
+            <p>Mask of the lesion detected:</p>
+            <img src={data.mask_image} className="rounded-sm"/>
+          </div>
+
+          {/* result */}
+          <div>
+            <h3 className="font-semibold text-center">Your result is in</h3>
+            <p className="text-center">Probability of melanoma is estimated to be:</p>
+            <p className="mt-4 text-5xl font-bold text-center">{Math.round(data.result * 10000) / 100}%</p>
+          </div>
+
         </div>
       )}
 
