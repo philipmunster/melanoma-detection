@@ -1,6 +1,6 @@
 "use client"
 
-import { Upload, ImagePlus, AlertCircleIcon } from "lucide-react"
+import { Upload, ImagePlus, AlertCircleIcon, LoaderCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useState, useRef, useEffect } from 'react'
 import { uploadImage } from "./actions" 
@@ -17,8 +17,9 @@ export default function TryPage() {
   const [data, setData] = useState<Data | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState<Boolean>(false)
+  const [isLoading, setIsLoading] = useState<Boolean>(false)
 
-  const formRef = useRef<HTMLFormElement>(null)
+  console.log(isLoading)
 
   useEffect(() => {
     // nothing
@@ -31,6 +32,8 @@ export default function TryPage() {
   }, [uploadedImageUrl])
 
   async function handleUpload(formData: FormData) {
+    setIsLoading(true)
+    setTimeout(()=>{},5000)
     setError(null)
     setData(null)
     const file = formData.get('file') as File
@@ -45,7 +48,17 @@ export default function TryPage() {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred')
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const formData = new FormData()
+    formData.append('file', file)
+    handleUpload(formData)
   }
 
   function handleDragOver(e: React.DragEvent) {
@@ -93,43 +106,49 @@ export default function TryPage() {
 
       {/* upload outer wrapper */}
 
-      {!data && (
+      {(!data) && (
         <div className="border border-sidebar-border p-5 rounded-md">
 
         <p className="font-semibold">Upload Lesion Image</p>
         <p>Drag and drop an image file or click to browse.</p>
         
         {/* upload drag and drop area */}
-        <div 
-          className={
-            `border border-neutral-300 border-dashed px-5 py-16 mt-5 rounded-md flex flex-col gap-6 items-center
-            ${isDragging ? "bg-blue-100 border-blue-800" : ""}
-            `
-          }
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <Upload className="size-10"/>
-          <div className="flex flex-col gap-1 items-center">
-            <p className="text-lg text-center">Drag and drop an image here</p>
-            <p className="text-gray-600 text-sm text-center">Supported formats: JPG and PNG</p>
-          </div>
+        {!isLoading 
+          ? (
+            <div 
+              className={
+                `border border-neutral-300 border-dashed px-5 py-16 mt-5 rounded-md flex flex-col gap-6 items-center
+                ${isDragging ? "bg-blue-100 border-blue-800" : ""}
+                `
+              }
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <Upload className="size-10"/>
+              <div className="flex flex-col gap-1 items-center">
+                <p className="text-lg text-center">Drag and drop an image here</p>
+                <p className="text-gray-600 text-sm text-center">Supported formats: JPG and PNG</p>
+              </div>
 
-          <form ref={formRef} action={handleUpload}>
-            <input 
-              type="file" 
-              id='file' 
-              name="file" 
-              accept=".png, .jpg, .jpeg" 
-              className="hidden"
-              onChange={() => formRef.current?.requestSubmit()}
-            />
-            <label className="flex items-center gap-2 border bg-black px-6 py-2 text-white rounded-md text-sm hover:bg-gray-800" htmlFor='file'>
-                or click to upload<ImagePlus className="size-5"/>
-            </label>
-          </form>
-        </div>
+              <input 
+                type="file" 
+                id='file' 
+                name="file" 
+                accept=".png, .jpg, .jpeg" 
+                className="hidden"
+                onChange={onFileChange}
+              />
+              <label className="flex items-center gap-2 border bg-black px-6 py-2 text-white rounded-md text-sm hover:bg-gray-800" htmlFor='file'>
+                  or click to upload<ImagePlus className="size-5"/>
+              </label>
+            </div>
+            ) 
+          : <div className=" border border-neutral-300 border-dashed px-5 py-16 mt-5 rounded-md flex justify-center gap-2 items-center">
+              <p className="font-semibold">Loading</p>
+              <LoaderCircle className="size-4 animate-spin" />
+            </div>
+        } 
           
       </div>)}
 

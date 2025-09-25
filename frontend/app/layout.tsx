@@ -66,7 +66,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
       <body
         className={`${inter.className} antialiased`}
       >
-        <SidebarProvider className="">
+        <SidebarProvider>
           <Sidebar variant="inset" side="left">
             <SidebarContent>
               <SidebarGroup>
@@ -105,9 +105,9 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
               </SidebarGroup>
             </SidebarContent>
           </Sidebar>
-          <SidebarInset className="">
+          <SidebarInset>
             
-            <div className="flex flex-col items-between">
+            <div className="flex flex-col items-between min-h-screen">
               <Header />
 
               <main className="grow p-6">
