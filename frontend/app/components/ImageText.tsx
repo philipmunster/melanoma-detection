@@ -25,17 +25,17 @@ export default function ImageText({ Icon, title, badges, Image, ImageSide = 'rig
     : null
 
   return (
-    <div className=" flex flex-col gap-4 items-center sm:flex-row sm:gap-16 sm:justify-between sm:h-70">
-      <div className={clsx(ImageSide === 'right' ? 'sm:order-1' : '', "w-full h-70 sm:w-1/3")}>
+    <div className=" flex flex-col gap-6 md:flex-row md:gap-16 md:justify-around md:h-70 md:items-center">
+      <div className={clsx(ImageSide === 'right' ? 'md:order-1' : '', "w-full h-70 md:w-1/3 lg:w-1/2")}>
         {Image}
       </div>
-      <div className="flex flex-col gap-4 sm:w-2/3">
+      <div className="flex flex-col gap-4 md:items-center md:text-center md:w-2/3 lg:w-1/2">
         <div className="flex items-center">
           {Icon && <IconWithBg Icon={Icon} color='red' size="sm"/>}
           <h3 className="ml-4 text-xl font-bold">{title}</h3>
         </div>
         <p className="leading-relaxed">{children}</p>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {badges && badgeElements}
         </div>
       </div>

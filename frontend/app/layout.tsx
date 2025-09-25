@@ -50,7 +50,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
 
   const itemsGroup2 = [
     {
-      title: "About us",
+      title: "About",
       url: "#",
       icon: Users,
     },
@@ -110,7 +110,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
             <div className="flex flex-col items-between min-h-screen">
               <Header />
 
-              <main className="grow p-6">
+              <main className="grow p-6 md:p-10">
                 {children}
               </main>
 

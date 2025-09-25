@@ -89,12 +89,12 @@ export default function TryPage() {
   }
 
   return (
-    <div className="flex flex-col gap-8 my-5">
+    <div className="flex flex-col gap-8">
       <Alert variant="destructive" className="border-red-300 bg-red-50">
         <AlertCircleIcon />
         <AlertTitle>Do not take these results seriously!</AlertTitle>
         <AlertDescription>
-          This algorithm can make mistakes. Always consult a doctor.
+          This website was made as a hobby project and results are not medical advice.
         </AlertDescription>
       </Alert>
         <div>
