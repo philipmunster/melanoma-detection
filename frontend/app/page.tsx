@@ -9,7 +9,7 @@ import Image from "next/image"
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-14 my-5">    
+    <div className="flex flex-col gap-14">    
       <section className="flex flex-col gap-4">
         <h1 className="text-4xl font-black">
           Melanoma Cancer 
@@ -19,13 +19,13 @@ export default function Home() {
           Upload an image of a lesion on your skin and our model will estimate the probability of melanoma cancer in the lesion. This algorithm was made as a student project on the IT-University in Copenhagen, with the goal of training an algorithm to correctly identify melanoma cases.
         </p>
         <div className="flex flex-col gap-3 md:flex-row">
-          <Link href='/'>
+          <Link href='/try'>
             <Button className="w-full sm:w-auto bg-red-600 py-5 hover:bg-red-500">
               <p>Try algorithm now</p>
               <MoveRight />
             </Button>
           </Link>
-          <Link href='/'>        
+          <Link href='/research'>        
             <Button className="w-full sm:w-auto py-5" variant={'outline'}>
               View Research
             </Button>
@@ -61,7 +61,7 @@ export default function Home() {
         }
         ImageSide="right"
       >
-        Our algorithm leverages the comprehensive PAD-UFES-20 dataset, featuring thousands of high-resolution dermatological images. This diverse training foundation enables accurate identification of complex skin lesion patterns across all demographics and skin types.
+        Our algorithm is trained on the comprehensive PAD-UFES-20 dataset, featuring thousands of high-resolution dermatological images.
       </ImageText>
 
       <ImageText 
@@ -92,8 +92,7 @@ export default function Home() {
         }
         ImageSide="left"
       >
-        Melanoma lesions are often characterized by asymmetry, irregular border, and variation of color in their architectural features. This is known by dermatologists as the ABC model.
-        Therefore, we developed and tested different methods to first remove hair and then extract these features using computer vision algorithms. 
+        Melanoma lesions are marked by asymmetry, irregular borders, and color variation—known as the ABC model. We tested methods to remove hair and extract these features with computer vision algorithms.
       </ImageText>
 
       <ImageText 
@@ -120,14 +119,14 @@ export default function Home() {
         }
         ImageSide="right"
       >
-        After testing several classification models, logistic regression achieved the best results based on AUC and F1 score. To address class imbalance, we applied oversampling and stratified k-fold cross-validation. Read the <Link className="underline" href='/'>research report</Link> for details.
+        Logistic regression delivered the best AUC and F1 score among tested models. To handle class imbalance, we used oversampling and stratified k-fold cross-validation. Read the <Link className="underline" href='/'>research report</Link> for details.
       </ImageText>
 
       <section className="bg-red-600 p-8 rounded-md flex flex-col items-center gap-5">
         <h3 className="text-white text-xl font-bold">Try for ourself</h3>
-        <p className="text-white text-center sm:max-w-2/3">Try to upload an image of a lesion on your skin. Within a few seconds you will get back an estimate of the probability of it being melanoma cancer. (This site was made for educational purposes only. Results may be wrong. Always consult a doctor.)</p>
-        <Button className="w-full sm:w-auto bg-white py-5 text-red-600">
-          <p>Try algorithm now</p>
+        <p className="text-white text-center sm:max-w-2/3">Try to upload an image of a lesion on your skin. Within a few seconds you will get back an our algorithms estimate of the probability of it being melanoma cancer.</p>
+        <Button className="w-full sm:w-auto bg-white py-5 text-black hover:text-white">
+          <p>Try now</p>
           <MoveRight />
         </Button>
       </section>

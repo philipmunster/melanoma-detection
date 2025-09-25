@@ -41,7 +41,7 @@ async def verify_api_key(api_key: str = None):
   return True
 
 @app.post("/process")
-@limiter.limit("3/minute")
+@limiter.limit("5/minute")
 @limiter.limit("20/hour")
 async def process_image(request: Request, file: UploadFile = File(...), api_key_valid: bool = Depends(verify_api_key)):
   try:
