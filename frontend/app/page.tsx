@@ -15,8 +15,8 @@ export default function Home() {
           Melanoma Cancer 
           <span className="block text-red-600">Detection Algorithm</span>
         </h1>
-        <p className="text-neutral-600 text-lg">
-          Upload an image of a lesion on your skin and our model will estimate the probability of melanoma cancer in the lesion. This algorithm was made as a student project on the IT-University in Copenhagen, with the goal of training an algorithm to correctly identify melanoma cases.
+        <p className="text-neutral-600 text-md">
+          Upload an image of a lesion on your skin and get an estimate of the probability of melanoma cancer. This algorithm was made as a student project on the IT-University in Copenhagen.
         </p>
         <div className="flex flex-col gap-3 md:flex-row">
           <Link href='/try'>
@@ -62,7 +62,7 @@ export default function Home() {
           }
           ImageSide="right"
         >
-          Our algorithm is trained on the comprehensive PAD-UFES-20 dataset, featuring thousands of high-resolution dermatological images.
+          The algorithm is trained on the comprehensive PAD-UFES-20 dataset, featuring thousands of high-resolution dermatological images.
         </ImageText>
 
         <ImageText 
@@ -126,7 +126,7 @@ export default function Home() {
 
       <section className="bg-red-600 p-8 rounded-md flex flex-col items-center gap-5">
         <h3 className="text-white text-xl font-bold">Try for ourself</h3>
-        <p className="text-white text-center sm:max-w-2/3">Try to upload an image of a lesion on your skin. Within a few seconds you will get back an our algorithms estimate of the probability of it being melanoma cancer.</p>
+        <p className="text-white text-center sm:max-w-2/3">Upload an image of a lesion on your skin. Within a few seconds you will get back estimates of the probability of it being melanoma cancer.</p>
         <Button className="w-full sm:w-auto bg-white py-5 text-black hover:text-white">
           <p>Try now</p>
           <MoveRight />

@@ -147,7 +147,7 @@ export default function TryPage() {
 
       <Alert variant="destructive" className="border-red-300 bg-red-50">
         <AlertCircleIcon />
-        <AlertTitle>Do not take these results seriously!</AlertTitle>
+        <AlertTitle>Not medical advice! Results are not reliable</AlertTitle>
         <AlertDescription>
           This website was made as a hobby project and results are not medical advice.
         </AlertDescription>
