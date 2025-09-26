@@ -56,7 +56,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
     },
     {
       title: "Contact",
-      url: "#",
+      url: "/contact",
       icon: Mail,
     },
   ]
