@@ -1,11 +1,21 @@
 "use client"
 
-import { Upload, ImagePlus, AlertCircleIcon, LoaderCircle } from "lucide-react"
+import { Upload, ImagePlus, AlertCircleIcon, LoaderCircle, MoveRight } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useState, useRef, useEffect } from 'react'
 import { uploadImage } from "./actions" 
 import { Button } from "@/components/ui/button"
 import imageCompression from 'browser-image-compression'
+import 'react-image-crop/dist/ReactCrop.css'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import ReactCrop, { type Crop } from 'react-image-crop'
+import { cropImage } from '@/app/try/cropImage'
 
 type Data = {
   result: number
@@ -14,13 +24,16 @@ type Data = {
 }
 
 export default function TryPage() {
+  const [file, setFile] = useState<File | null>(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
   const [data, setData] = useState<Data | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isDragging, setIsDragging] = useState<Boolean>(false)
   const [isLoading, setIsLoading] = useState<Boolean>(false)
+  const [showCropModal, setShowCropModal] = useState<Boolean>(false)
+  const [crop, setCrop] = useState<Crop | undefined>()
 
-  console.log(isLoading)
+  const imgRef = useRef<HTMLImageElement | null>(null)
 
   useEffect(() => {
     // nothing
@@ -32,12 +45,11 @@ export default function TryPage() {
     }
   }, [uploadedImageUrl])
 
-  async function handleUpload(formData: FormData) {
+  async function handleUpload(file: File) {
     setIsLoading(true)
     setTimeout(()=>{},5000)
     setError(null)
     setData(null)
-    const file = formData.get('file') as File
     const fileURL = URL.createObjectURL(file)
     setUploadedImageUrl(fileURL)
     try {
@@ -50,7 +62,6 @@ export default function TryPage() {
       })
       const compFormData = new FormData()
       compFormData.append('file', new File([compressedBlob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }))
-
       // upload image
       const data: Data = await uploadImage(compFormData)
       if (data) {
@@ -65,12 +76,26 @@ export default function TryPage() {
     }
   }
 
+  async function handleCrop() {
+    const cropFile = await cropImage(file, crop, imgRef)
+
+    if (!cropFile) return
+
+    setShowCropModal(false)
+    setFile(null)
+    setCrop(undefined)
+
+    handleUpload(cropFile)
+
+  }
+
   function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const formData = new FormData()
-    formData.append('file', file)
-    handleUpload(formData)
+    const uploadedFile = e.target.files?.[0]
+    if (uploadedFile) {
+      setFile(uploadedFile)
+      setUploadedImageUrl(URL.createObjectURL(uploadedFile))
+      setShowCropModal(true)
+    }
   }
 
   function handleDragOver(e: React.DragEvent) {
@@ -86,11 +111,11 @@ export default function TryPage() {
   function handleDrop(e: React.DragEvent) {
     e.preventDefault()
     setIsDragging(false)
-    const file = e.dataTransfer?.files[0]
-    if (file) {
-      const formData = new FormData()
-      formData.append('file', file)
-      handleUpload(formData)
+    const uploadedFile = e.dataTransfer?.files[0]
+    if (uploadedFile) {
+      setFile(uploadedFile)
+      setUploadedImageUrl(URL.createObjectURL(uploadedFile))
+      setShowCropModal(true)
     }
   }
 
@@ -102,6 +127,24 @@ export default function TryPage() {
 
   return (
     <div className="flex flex-col gap-8">
+
+      {(showCropModal && uploadedImageUrl) && 
+        <Dialog defaultOpen onOpenChange={() => setShowCropModal(false)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Click on the image to crop it</DialogTitle>
+              <DialogDescription>Make sure the only thing in the image is the lesion (with minimal skin around)</DialogDescription>
+            </DialogHeader>
+            <div className="flex flex-col items-center gap-6">
+              <ReactCrop crop={crop} onChange={c => setCrop(c)}>
+                <img ref={imgRef} src={uploadedImageUrl} className='rounded-md'/>
+              </ReactCrop>
+          
+              <Button onClick={handleCrop}>Calculate result <MoveRight /></Button>
+            </div>
+          </DialogContent>
+        </Dialog>}
+
       <Alert variant="destructive" className="border-red-300 bg-red-50">
         <AlertCircleIcon />
         <AlertTitle>Do not take these results seriously!</AlertTitle>
@@ -174,6 +217,8 @@ export default function TryPage() {
             <p className="mt-4 text-5xl font-bold text-center">{Math.round(data.result * 10000) / 100}%</p>
           </div>
 
+          <Button variant={'outline'} onClick={handleTryAgain} className="sm:hidden">Try again with another image <ImagePlus className="size-5"/></Button>
+
           {/* images */}
           <div className="flex flex-col items-center gap-10 flex-wrap sm:flex-row sm:justify-center sm:gap-5">
             {/* uploaded image */}
@@ -196,8 +241,8 @@ export default function TryPage() {
             </div>
           </div>
 
-          {/* try another image */}
-          <Button variant={'outline'} onClick={handleTryAgain}>Try again with another image <ImagePlus className="size-5"/></Button>
+          {/* desktop try another image */}
+          <Button variant={'outline'} onClick={handleTryAgain} className="hidden sm:flex">Try again with another image <ImagePlus className="size-5"/></Button>
 
         </div>
       ) : error ? error && <p className="text-center mt-6 text-red-600 text-xl font-bold">{error}</p> : null}
