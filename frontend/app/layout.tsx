@@ -51,7 +51,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
   const itemsGroup2 = [
     {
       title: "About",
-      url: "#",
+      url: "/about",
       icon: Users,
     },
     {
