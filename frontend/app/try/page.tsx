@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useState, useRef, useEffect } from 'react'
 import { uploadImage } from "./actions" 
 import { Button } from "@/components/ui/button"
+import imageCompression from 'browser-image-compression'
 
 type Data = {
   result: number
@@ -40,7 +41,18 @@ export default function TryPage() {
     const fileURL = URL.createObjectURL(file)
     setUploadedImageUrl(fileURL)
     try {
-      const data: Data = await uploadImage(formData)
+      // compress image and convert to JPEG
+      const compressedBlob = await imageCompression(file, {
+        maxWidthOrHeight: 1280,
+        initialQuality: 0.8,
+        maxSizeMB: 0.2,
+        useWebWorker: true
+      })
+      const compFormData = new FormData()
+      compFormData.append('file', new File([compressedBlob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }))
+
+      // upload image
+      const data: Data = await uploadImage(compFormData)
       if (data) {
         setData(data)
       } else {

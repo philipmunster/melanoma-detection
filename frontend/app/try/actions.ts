@@ -13,10 +13,6 @@ export async function uploadImage(formData: FormData) {
   if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
     throw new Error('Invalid file type. Please upload a .png, .jpg or .jpeg file.')
   }
-
-  // const backendFormData = new FormData()
-  // backendFormData.append('file', file)
-  // console.log(backendFormData)
   
   const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000'
 

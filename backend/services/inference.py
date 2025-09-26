@@ -12,6 +12,6 @@ def predict_proba_from_features(x) -> float:
     """
     features_dict must contain ALL keys in FEATURES with numeric values.
     """
-    x = pd.DataFrame([x], columns=FEATURES)
+    x = pd.DataFrame([x], columns=FEATURES).fillna(0)
     proba = float(PIPELINE.predict_proba(x)[0, 1])
     return proba
