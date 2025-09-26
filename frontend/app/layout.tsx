@@ -43,7 +43,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
     },
     {
       title: "Research",
-      url: "#",
+      url: "/research",
       icon: BookText,
     },
   ]

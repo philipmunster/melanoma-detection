@@ -101,7 +101,7 @@ export default function TryPage() {
           <h1 className="text-3xl font-black mb-2">
               Try now
           </h1>
-          <p>Upload an image of a lesion and receive our algorithm's estimated probability of melanoma. Our AI will analyze the image using the same ABC features that dermatologists use in clinical practice.</p>
+          <p className="text-neutral-600">Upload an image of a lesion and receive our algorithm's estimated probability of melanoma. Our AI will analyze the image using the same ABC features that dermatologists use in clinical practice.</p>
         </div>
 
       {/* upload outer wrapper */}
