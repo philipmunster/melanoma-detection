@@ -2,7 +2,7 @@
 Check out the website here: ...
 
 ### Preview
-...
+<img width="1602" height="1032" alt="image" src="https://github.com/user-attachments/assets/68febb03-cbee-45e8-9158-c1d501e3b0b8" />
 
 ### Description
 Upload an image of a lesion and receive an estimate of it being Melanoma or not. Our algorithm will try to analyze the image using the same ABC features that dermatologists use in clinical practice.
