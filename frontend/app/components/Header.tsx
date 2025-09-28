@@ -1,4 +1,4 @@
-import { SearchCode, Menu } from 'lucide-react'
+import { SearchCode } from 'lucide-react'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import IconWithBg from '@/app/components/IconWithBg'
 

@@ -54,9 +54,9 @@ export default function Home() {
           Image={
             <Image 
             src={ImageSection1}
-            alt='bla'
-            width={3456}
-            height={5184}
+            alt='Melanoma cancer cell'
+            width={3930}
+            height={5390}
             className="w-full h-full object-cover rounded-md"
             />
           }
@@ -85,7 +85,7 @@ export default function Home() {
           Image={
             <Image 
             src={ImageSection2}
-            alt='bla'
+            alt='Womens shoulder with freckles on it'
             width={3456}
             height={5184}
             className="w-full h-full object-cover rounded-md"
@@ -112,9 +112,9 @@ export default function Home() {
           Image={
             <Image 
             src={ImageSection3}
-            alt='bla'
-            width={3456}
-            height={5184}
+            alt='Bar chart with increasing white bars'
+            width={1080}
+            height={1080}
             className="w-full h-full object-cover rounded-md"
             />
           }
@@ -128,7 +128,7 @@ export default function Home() {
         <h3 className="text-white text-xl font-bold">Try for ourself</h3>
         <p className="text-white text-center sm:max-w-2/3">Upload an image of a lesion on your skin. Within a few seconds you will get back estimates of the probability of it being melanoma cancer.</p>
         <Button className="w-full sm:w-auto bg-white py-5 text-black hover:text-white">
-          <p>Try now</p>
+          <Link href='/try'>Try now</Link>
           <MoveRight />
         </Button>
       </section>

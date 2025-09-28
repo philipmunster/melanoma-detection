@@ -20,12 +20,12 @@ export default function AboutPage() {
           <AccordionTrigger className="font-semibold">Who built this project?</AccordionTrigger>
           <AccordionContent className="flex flex-col gap-4 text-balance mb-2">
             <p>
+              The website was built as a hobby project by Philip Münster-Hansen.
+            </p>
+            <p>
               The algorithm was built by Asta Trier Wang, Bruno Alessandro Damian Modica Figueira, Jan Peter
               Cardell, Maja Kalina Oska, and Philip Münster-Hansen. This algorithm was developed as part of the
               “Projects in Data Science” course at the IT University of Copenhagen.
-            </p>
-            <p>
-              The website and backend orchestration were built as a hobby project by Philip Münster-Hansen.
             </p>
           </AccordionContent>
         </AccordionItem>

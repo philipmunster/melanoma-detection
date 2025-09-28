@@ -5,7 +5,7 @@ import pandas as pd
 artifact = joblib.load('backend/models/model_v3.joblib')
 PIPELINE = artifact["pipeline"]
 FEATURES = artifact["feature_names"]
-THRESHOLD = artifact.get("threshold", 0.5)
+THRESHOLD = artifact.get("threshold")
 VERSION = artifact.get("version", "v?")
 
 def predict_proba_from_features(x) -> float:
@@ -14,4 +14,5 @@ def predict_proba_from_features(x) -> float:
     """
     x = pd.DataFrame([x], columns=FEATURES).fillna(0)
     proba = float(PIPELINE.predict_proba(x)[0, 1])
-    return proba
+    is_melanoma = (proba >= THRESHOLD)
+    return proba, is_melanoma
