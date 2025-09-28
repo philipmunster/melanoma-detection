@@ -11,9 +11,9 @@ from PIL import Image
 from io import BytesIO
 import os
 from dotenv import load_dotenv
-from backend.utils import get_ABC
+from utils import get_ABC
 import matplotlib.pyplot as plt
-from backend.services.inference import predict_proba_from_features
+from services.inference import predict_proba_from_features
 import base64
 import numpy as np
 import cv2
