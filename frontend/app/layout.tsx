@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from '@/app/components/Header'
@@ -118,6 +119,7 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
 
           </SidebarInset>
         </SidebarProvider>
+        <Analytics />
       </body>
     </html>
   );
