@@ -2,7 +2,7 @@
 import { Badge } from "@/components/ui/badge"
 import IconWithBg from '@/app/components/IconWithBg'
 import type { LucideIcon } from "lucide-react"
-import { ReactElement, ReactHTMLElement, ReactNode } from "react"
+import { ReactElement, ReactNode } from "react"
 import clsx from "clsx"
 
 type badgeInfo = {

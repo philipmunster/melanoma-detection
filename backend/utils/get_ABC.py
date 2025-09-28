@@ -3,7 +3,11 @@ import numpy as np
 import pandas as pd
 
 # import all utils
-from backend.utils import *
+from .get_feature_A import get_feature_A
+from .get_feature_B import get_feature_B
+from .get_feature_C import get_feature_C
+from .remove_hair import remove_hair
+from .get_mask_v2 import get_mask_v2
     
 def get_ABC(content):
   try: 
@@ -13,7 +17,7 @@ def get_ABC(content):
     # apply the hair removal function with the optimal parameters found through cohens kappa
     blackhat, tresh, img_hairless = remove_hair(img_rgb, img_gray, kernel_size=5, threshold=10, radius=3)
     # use the original image and the annotated mask to compute our own region growing mask
-    img_mask = get_mask(img_hairless)
+    img_mask = get_mask_v2(img_hairless)
     # fallback if the img_mask could not be computed and therefore it's all black
     if np.sum(img_mask) == 0:
         raise RuntimeError("No mask")

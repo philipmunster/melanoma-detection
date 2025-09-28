@@ -73,6 +73,8 @@ async def process_image(request: Request, file: UploadFile = File(...), api_key_
 
       proba, is_melanoma = predict_proba_from_features([A, B, C])
 
+      print(f"---RESULT--- \n A: {A} \n B: {B} \n C: {C} \n Probability: {proba}")
+
       # Encode img_hairless (RGB) as base64
       hairless_pil = Image.fromarray(img_hairless)
       hairless_buffer = BytesIO()
@@ -86,12 +88,11 @@ async def process_image(request: Request, file: UploadFile = File(...), api_key_
       mask_pil.save(mask_buffer, format="PNG")
       mask_base64 = base64.b64encode(mask_buffer.getvalue()).decode('utf-8')
 
-      print(is_melanoma)
-
       # Return with images
       return JSONResponse(content={
           "isMelanoma": is_melanoma,
           "probability": float(proba),
+          "features": [A, B, C],
           "hairless_image": f"data:image/png;base64,{hairless_base64}",
           "mask_image": f"data:image/png;base64,{mask_base64}"
       })

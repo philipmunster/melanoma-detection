@@ -17,10 +17,12 @@ import {
 import ReactCrop, { type Crop } from 'react-image-crop'
 import { cropImage } from '@/app/try/cropImage'
 import clsx from "clsx"
+import Image from 'next/image'
 
 type Data = {
   isMelanoma: boolean
   probability: number
+  features: number[]
   hairless_image: string
   mask_image: string
 }
@@ -30,9 +32,9 @@ export default function TryPage() {
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null)
   const [data, setData] = useState<Data | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [isDragging, setIsDragging] = useState<Boolean>(false)
-  const [isLoading, setIsLoading] = useState<Boolean>(false)
-  const [showCropModal, setShowCropModal] = useState<Boolean>(false)
+  const [isDragging, setIsDragging] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [showCropModal, setShowCropModal] = useState<boolean>(false)
   const [crop, setCrop] = useState<Crop | undefined>()
 
   const imgRef = useRef<HTMLImageElement | null>(null)
@@ -134,12 +136,12 @@ export default function TryPage() {
         <Dialog defaultOpen onOpenChange={() => setShowCropModal(false)}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Click on the image to crop it</DialogTitle>
-              <DialogDescription>Make sure the only thing in the image is the lesion (with minimal skin around)</DialogDescription>
+              <DialogTitle>Click and drag on the image to crop it</DialogTitle>
+              <DialogDescription>Make sure the only thing in the image is the lesion (with minimal skin around it)</DialogDescription>
             </DialogHeader>
             <div className="flex flex-col items-center gap-6">
               <ReactCrop crop={crop} onChange={c => setCrop(c)}>
-                <img ref={imgRef} src={uploadedImageUrl} className='rounded-md'/>
+                  <img ref={imgRef} src={uploadedImageUrl} alt="user uploaded image of lesion" className='rounded-md'/>
               </ReactCrop>
           
               <Button onClick={handleCrop}>Calculate result <MoveRight /></Button>
@@ -158,7 +160,8 @@ export default function TryPage() {
           <h1 className="text-3xl font-black mb-2">
               Try now
           </h1>
-          <p className="text-neutral-600">Upload an image of a lesion and receive our algorithm's estimated probability of melanoma. Our AI will analyze the image using the same ABC features that dermatologists use in clinical practice.</p>
+          <p className="text-neutral-600">Upload an image of a lesion and receive our algorithm&apos;s estimate of it being Melanoma or not. Our algorithm will try to analyze the image using the same ABC features that dermatologists use in clinical practice.</p>
+          <p className="mt-4 text-sm">Just want to test? <a href="/example.png" download className="underline font-bold">Click here</a> to download a test image you can use.</p>
         </div>
 
       {/* upload outer wrapper */}
@@ -166,8 +169,8 @@ export default function TryPage() {
       {(!data) && (
         <div className="border border-sidebar-border p-5 rounded-md">
 
-        <p className="font-semibold">Upload Lesion Image</p>
-        <p>Drag and drop an image file or click to browse.</p>
+        <p className="font-semibold">Upload lesion image</p>
+        <p>Drag and drop an image or click to upload.</p>
         
         {/* upload drag and drop area */}
         {!isLoading 
@@ -216,7 +219,7 @@ export default function TryPage() {
           <div>
             <h3 className="font-semibold text-center">Your result is in</h3>
             <p className="text-center">The algorithm detects:</p>
-            <p className={clsx(data.isMelanoma ? 'text-red-700' : 'text-green-700', "mt-4 text-5xl font-bold text-center")}>{data.isMelanoma ? 'Melanoma' : 'No Melanoma'}</p>
+            <p className={clsx(data.isMelanoma ? 'text-red-700' : 'text-green-700', "mt-4 text-4xl font-bold text-center")}>{data.isMelanoma ? 'Melanoma' : 'No Melanoma'}<sup className="text-gray-400">*</sup></p>
           </div>
 
           <Button variant={'outline'} onClick={handleTryAgain} className="sm:hidden">Try again with another image <ImagePlus className="size-5"/></Button>
@@ -227,24 +230,42 @@ export default function TryPage() {
             {uploadedImageUrl && (
               <div className="flex flex-col items-center gap-2 font-semibold sm:max-w-70">
                 <p>Your uploaded image:</p>
-                <img src={uploadedImageUrl} className="rounded-sm"/>
+                <div className="relative w-70 h-70">
+                  <Image src={uploadedImageUrl} alt="User uploaded image of lesion" fill className="rounded-sm w-70 object-contain"/>
+                </div>
               </div>
             )}
             {/* hair removed */}
             <div className="flex flex-col items-center gap-2 font-semibold sm:max-w-70">
               <p>Result from removing hair:</p>
-              <img src={data.hairless_image} className="rounded-sm"/>
+              <div className="relative w-70 h-70">
+                <Image src={data.hairless_image} alt="User uploaded image of leasion with hair removed" fill className="rounded-sm w-70 object-contain"/>
+              </div>
             </div>
             
             {/* mask */}
             <div className="flex flex-col items-center gap-2 font-semibold sm:max-w-70">
               <p>Mask of the lesion detected:</p>
-              <img src={data.mask_image} className="rounded-sm"/>
+              <div className="relative w-70 h-70">
+                <Image src={data.mask_image} alt="Mask of lesion in user uploaded image" fill className="rounded-sm object-contain"/>
+              </div>
             </div>
           </div>
 
           {/* desktop try another image */}
           <Button variant={'outline'} onClick={handleTryAgain} className="hidden sm:flex">Try again with another image <ImagePlus className="size-5"/></Button>
+
+          <div className="text-gray-500 text-sm text-left flex flex-col gap-2">
+            <p>
+              Your exact result is an estimated probability of {Math.round(data.probability * 10000) / 100}%. This is based on a logistic regression algorithm. We aim to maximize F1-score (harmonic balance between precision and recall), which is done by classifying everthing above a 56,3% probability as Melanoma.
+            </p>
+            <p>
+              The standardized features detected was:
+              Assymetry score: {Math.round(data.features[0] * 100) / 100}, 
+              Border irregularity score: {Math.round(data.features[1] * 100) / 100},
+              Color score: {Math.round(data.features[2] * 100) / 100}
+            </p>
+          </div>
 
         </div>
       ) : error ? error && <p className="text-center mt-6 text-red-600 text-xl font-bold">{error}</p> : null}

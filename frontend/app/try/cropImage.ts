@@ -1,4 +1,4 @@
-import { Ref, RefObject } from "react"
+import { RefObject } from "react"
 import type { Crop } from 'react-image-crop'
   
 export async function cropImage(file: File | null, crop: Crop | undefined, imgRef: RefObject<HTMLImageElement | null>): Promise<File | null> {
