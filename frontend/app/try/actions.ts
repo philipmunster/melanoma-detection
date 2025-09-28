@@ -14,7 +14,7 @@ export async function uploadImage(formData: FormData) {
     throw new Error('Invalid file type. Please upload a .png, .jpg or .jpeg file.')
   }
   
-  const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000'
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
   const res = await fetch(`${backendUrl}/process?api_key=${process.env.API_KEY}`, {
     method: 'POST',
