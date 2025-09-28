@@ -26,7 +26,7 @@ app.add_middleware(SlowAPIMiddleware)
 
 app.add_middleware(
   CORSMiddleware,
-  allow_origins=["http://localhost:3000", "https://my-frontend-domain.com"],
+  allow_origins=["http://localhost:3000", "https://melanoma-detection-one.vercel.app"],
   allow_credentials=True,
   allow_methods=["GET", "POST"],
   allow_headers=["*"],
