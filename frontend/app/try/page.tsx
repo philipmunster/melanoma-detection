@@ -16,9 +16,11 @@ import {
 } from "@/components/ui/dialog"
 import ReactCrop, { type Crop } from 'react-image-crop'
 import { cropImage } from '@/app/try/cropImage'
+import clsx from "clsx"
 
 type Data = {
-  result: number
+  isMelanoma: boolean
+  probability: number
   hairless_image: string
   mask_image: string
 }
@@ -213,8 +215,8 @@ export default function TryPage() {
           {/* result probability */}
           <div>
             <h3 className="font-semibold text-center">Your result is in</h3>
-            <p className="text-center">Probability of melanoma is estimated to be:</p>
-            <p className="mt-4 text-5xl font-bold text-center">{Math.round(data.result * 10000) / 100}%</p>
+            <p className="text-center">The algorithm detects:</p>
+            <p className={clsx(data.isMelanoma ? 'text-red-700' : 'text-green-700', "mt-4 text-5xl font-bold text-center")}>{data.isMelanoma ? 'Melanoma' : 'No Melanoma'}</p>
           </div>
 
           <Button variant={'outline'} onClick={handleTryAgain} className="sm:hidden">Try again with another image <ImagePlus className="size-5"/></Button>
