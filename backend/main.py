@@ -40,9 +40,13 @@ async def verify_api_key(api_key: str = None):
     raise HTTPException(status_code=401, detail="Invalid API key")
   return True
 
+@app.get("/health")
+def health():
+    return {"ok": True}
+
 @app.post("/process")
-@limiter.limit("5/minute")
-@limiter.limit("20/hour")
+@limiter.limit("10/minute")
+@limiter.limit("50/hour")
 async def process_image(request: Request, file: UploadFile = File(...), api_key_valid: bool = Depends(verify_api_key)):
   try:
     async with asyncio.timeout(30): # 30 sec to process image
