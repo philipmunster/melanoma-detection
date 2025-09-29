@@ -17,6 +17,7 @@ import {
   SidebarInset,
 } from '@/components/ui/sidebar'
 import { Mail, Home, UserSearch, BookText, Users } from "lucide-react"
+import PingHealth from '@/app/components/PingHealth'
 
 const inter = Inter({
   display: "swap",
@@ -120,6 +121,8 @@ export default function RootLayout({children,}: Readonly<{children: React.ReactN
           </SidebarInset>
         </SidebarProvider>
         <Analytics />
+        
+        <PingHealth />
       </body>
     </html>
   );
