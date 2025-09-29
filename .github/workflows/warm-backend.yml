@@ -1,13 +1,14 @@
 name: Warm backend
+
 on:
   schedule:
     - cron: "*/10 * * * *"
   workflow_dispatch:
 
 jobs:
-  curl:
+  ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping backend
+      - name: Ping Render health endpoint
         run: |
-          curl -sS -m 10 https://YOUR-BACKEND.onrender.com/health || true
+          curl -fsS -m 10 "${{ secrets.BACKEND_HEALTH_URL }}" || true
