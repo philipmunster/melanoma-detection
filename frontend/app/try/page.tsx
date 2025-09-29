@@ -257,7 +257,8 @@ export default function TryPage() {
 
           <div className="text-gray-500 text-sm text-left flex flex-col gap-2">
             <p>
-              Your exact result is an estimated probability of {Math.round(data.probability * 10000) / 100}%. This is based on a logistic regression algorithm. We aim to maximize F1-score (harmonic balance between precision and recall), which is done by classifying everthing above a 56,3% probability as Melanoma.
+              {/* Your exact result is an estimated probability of {Math.round(data.probability * 10000) / 100}%.  */}
+              This result is based on a logistic regression algorithm. The aim is to maximize F1-score (harmonic balance between precision and recall), which is done by classifying everthing above an estimated probability of 56,3% as Melanoma.
             </p>
             <p>
               The standardized features detected was:
