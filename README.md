@@ -6,7 +6,7 @@ Check out the website here: https://melanoma-detection-one.vercel.app/
 
 ### Description
 Upload an image of a lesion and receive an estimate of it being Melanoma or not. Our algorithm will try to analyze the image using the same ABC features that dermatologists use in clinical practice.
-The algorithm is a balanced logistic regression model trained on the PAD-UFES-20 dataset.
+The algorithm is a balanced logistic regression model trained on the PAD-UFES-20 dataset. 
 
 ### Tech stack
 - Next.js
